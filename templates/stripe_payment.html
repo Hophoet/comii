@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block link %}
+<link href="{% static 'css/stripe.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container wow fadeIn">
+
+      <!-- Heading -->
+      <h2 class="my-5 h2 text-center">Payment</h2>
+
+      <!--Grid row-->
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+              <form id="payment-form" method="post" class="card-body" action="{% url 'core:stripe_payment' %}">
+                  {% csrf_token %}
+                  <div class="">
+                    <label for="card-element">
+                      Credit or debit card
+                    </label>
+                    <div id="card-element">
+                      <!-- A Stripe Element will be inserted here. -->
+                      <input class="StripeElement" type="text" name='card-code'>
+                    </div>
+                
+                    <!-- Used to display form errors. -->
+                    <div id="card-errors" role="alert"></div>
+                  </div>
+                
+                  <button class="btn btn-info" type="submit">Submit Payment</button>
+    
+              </form>
+
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-4 mb-4">
+
+          {% include 'cart.html' %}
+
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+    </main>
+    <!--Main layout-->
+
+
+{% endblock %}
+
+{% block script %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<script type="text/javascript" src="{% static 'js/stripe.js' %}"></script>
+
+{% endblock %}
