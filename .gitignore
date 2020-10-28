@@ -110,3 +110,6 @@ media/
 #
 config
 apis/config.txt
+
+#used template files
+template/
