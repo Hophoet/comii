@@ -1,0 +1,27 @@
+{% extends 'test_base.html' %}
+
+{% block body %}
+    <div>
+            {% for item in items %}
+                <li>
+                    <img src="{{item.image.url}}" alt="">
+                        <a href="{% url 'core:item_detail' pk=item.id %} ">{{item.title}}</a>
+                     {% if item.discount_price %}
+                        <div>
+                            <p>{{item.price}}$  <strong>{{item.discount_price}}$</strong></p>
+                        </div>                      
+                     {% else %}
+                        <div>
+                            <p>{{item.price}}$</p>
+                        </div>                 
+                     {% endif %}
+                     <p>{{item.description}}</p>
+                </li>    
+
+            {% endfor %}
+            </ul>
+           
+
+    </div>
+
+{% endblock %}

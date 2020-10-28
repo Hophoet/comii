@@ -1,0 +1,34 @@
+{% extends 'test_base.html' %}
+{% load cart_template_tags %}
+
+
+
+{% block body %}
+    <div>
+        <img src="{{item.image.url}}" alt="">
+        <h3>{{item.title}}</h3>
+        {% if item.discount_price %}
+            <div>
+                <p>{{item.price}}$  <strong>{{item.discount_price}}$</strong></p>
+            </div>                      
+        {% else %}
+            <div>
+                <p>{{item.price}}$</p>
+            </div>                 
+        {% endif %}
+        <p>{{item.description}}</p>
+        <div>
+            <a href="{% url 'core:add_to_cart' id=item.id %}">ADD TO CART</a>
+        </div>
+        <div>
+            <a href="{% url 'core:remove_from_cart' id=item.id %}">REMOVE FROM CART</a>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+        
+
+
+           

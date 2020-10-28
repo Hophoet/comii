@@ -1,0 +1,41 @@
+{% load static %}
+{% load cart_template_tags %}
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<!-- belle/index.html   11 Nov 2019 12:16:10 GMT -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>COMII</title>
+</head>
+
+<body>  
+    <header>
+        <nav>
+            <a href="{% url 'core:home' %}">comii</a>
+        </nav>
+        {% if user.is_authenticated %}
+            <span class="badge red z-depth-1 mr-1">{{ request.user|cart_item_count }}</span>
+        {% endif %}
+        {% if messages %}
+            <div>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+            
+        {% endif %}
+    </header>
+    <div>
+        {% block body %}
+
+        {% endblock %}
+    </div>
+
+
+</body>
+
+</html>
