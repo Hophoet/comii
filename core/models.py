@@ -32,6 +32,19 @@ class Cart(models.Model):
         order_items = self.orderitem_set.get_queryset()
         count = order_items.count()
         return count
+    
+    #cart query order items getter
+    def get_order_items_query(self):
+        order_items_query = self.orderitem_set.get_queryset()
+        return order_items_query
+
+    def get_total_price(self):
+        order_items = self.orderitem_set.get_queryset()
+        total_price = 0
+        for order_item in order_items:
+            total_price += order_item.get_final_price()
+        return total_price
+
     def __str__(self):
         return f'{self.user.username} {self.orderitem_set.count()}'
 
@@ -40,7 +53,24 @@ class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    ordered = models.BooleanField(default=False)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_amount_saved(self):
+        if self.item.discount_price:
+            saved_amount = self.item.price - self.item.discount_price
+            return saved_amount
+        return 0
+
+    def get_total_order_item_price(self):
+        total_order_item_price = self.get_final_price() * self.quantity
+
+
+    def get_final_price(self):
+        if self.item.discount_price:
+            return self.item.discount_price
+        return self.item.price
+
 
     def __str__(self):
         return self.item.title
