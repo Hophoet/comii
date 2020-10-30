@@ -4,10 +4,10 @@ from django.contrib import messages
 from  django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
 
+#
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Item, OrderItem, Cart, User
-# Create your views here.
-def home(request):
-    return render(request, 'core/index.html', {})
 
 
 # Create your views here.
@@ -133,7 +133,7 @@ def remove_single_order_item_from_cart(request, id):
 
 
 
-class CartView(View):
+class CartView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         #geting of the order_item, or creation if not exists
         cart, cart_created = Cart.objects.get_or_create(
@@ -147,4 +147,22 @@ class CartView(View):
             print(cart.get_order_items_query())
             return render(self.request, 'core/cart.html', context)
 
+        return redirect('core:home')
+
+    
+class CheckoutView(LoginRequiredMixin, View):
+    """ Checkout view """
+    def get(self, *args, **kwargs):
+        """ get request method """
+        cart, cart_created = Cart.objects.get_or_create(
+            user=self.request.user,
+            ordered=False,
+        )
+        if not cart_created:
+            context =  {
+                'cart':cart
+            }
+
+            
+            return render(self.request, 'core/checkout.html', context)
         return redirect('core:home')
