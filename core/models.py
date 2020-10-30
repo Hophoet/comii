@@ -42,7 +42,7 @@ class Cart(models.Model):
         order_items = self.orderitem_set.get_queryset()
         total_price = 0
         for order_item in order_items:
-            total_price += order_item.get_final_price()
+            total_price += order_item.get_final_price() * order_item.quantity
         return total_price
 
     def __str__(self):
@@ -64,6 +64,7 @@ class OrderItem(models.Model):
 
     def get_total_order_item_price(self):
         total_order_item_price = self.get_final_price() * self.quantity
+        return total_order_item_price
 
 
     def get_final_price(self):
