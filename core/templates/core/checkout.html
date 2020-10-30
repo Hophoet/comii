@@ -1,0 +1,28 @@
+{% extends 'test_base.html' %}
+
+{% block body %}
+
+    <div class="container">
+
+
+        <div class="table-reponsive text-nowrap">
+          <h2>Your cart</h2>
+          <ul>
+          {% for order_item in cart.get_order_items_query %}
+            <li>
+              <span><strong>{{order_item.quantity}}  </strong>{{order_item.item.title|truncatewords:4}}</span>
+              <strong>${{order_item.get_total_order_item_price}}</strong>
+              <p>{{order_item.item.description|truncatewords:8}}</p>
+            </li>
+          {% endfor %}  
+          <div>
+            <p>Total (USD)</p>
+            <strong>${{ cart.get_total_price }}</strong>
+          </div> 
+        </ul>
+
+        
+        </div>
+    
+        </div>
+{% endblock %}
