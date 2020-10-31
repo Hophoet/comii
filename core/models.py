@@ -13,7 +13,7 @@ class Item(models.Model):
     title = models.CharField(verbose_name='title', max_length=100)
     price =  models.IntegerField(verbose_name='price')
     discount_price = models.IntegerField(verbose_name='discount price', null=True, blank=True)
-    image = models.ImageField(verbose_name='image')
+    image = models.ImageField(verbose_name='image', null=True, blank=True)
     category = models.CharField(verbose_name='category', choices=ITEMS_CATEGORIES, max_length=2)
     description = models.TextField(verbose_name='description')
     quantity = models.IntegerField(verbose_name='quantity')
