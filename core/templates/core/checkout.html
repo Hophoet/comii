@@ -23,6 +23,28 @@
 
         
         </div>
+
+        <div>
+          <h1>Fill to continue</h1>
+          <form method="POST" action="{% url 'core:checkout' %}">
+            {% csrf_token %}
+            <div>
+              {{checkout_form.street_address}}
+
+              {{checkout_form.apartment_address}}
+
+              {{ checkout_form.country }}
+
+              {{checkout_form.zip}}
+
+              {{ checkout_form.save_info }}
+
+              {{checkout_form.same_billing_address}}
+
+              {{checkout_form.payment_option}}
+            </div>
+          </form>
+        </div>
     
         </div>
 {% endblock %}

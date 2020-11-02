@@ -8,13 +8,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Item, OrderItem, Cart, User
-
+from .forms import CheckoutForm
 
 # Create your views here.
 class HomeView(ListView):
     """ Home page view """
     model = Item
-    template_name = 'core/index.html'
+    template_name = 'home.html'
     context_object_name = 'items'
     # paginate_by = 4
     # ordering = 'title'
@@ -158,9 +158,12 @@ class CheckoutView(LoginRequiredMixin, View):
             user=self.request.user,
             ordered=False,
         )
+        
         if not cart_created:
+            checkout_form = CheckoutForm()
             context =  {
-                'cart':cart
+                'cart':cart,
+                'checkout_form':checkout_form
             }
 
             
