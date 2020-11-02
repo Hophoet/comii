@@ -6,19 +6,19 @@
 
 <!-- Cart -->
 <ul class="list-group mb-3 z-depth-1">
-  {% for order_item in order.items.all %}
+  {% for order_item in cart.get_order_items_query%}
   <li class="list-group-item d-flex justify-content-between lh-condensed">
     <div>
       <span class="badge badge-secondary badge-pill">{{ order_item.quantity }}</span>
-      <h6 class="my-0">{{order_item.item.title}}</h6>
-      <small class="text-muted">{{order_item.item.description|truncatewords:7}}</small>
+      <h6 class="my-0">{{order_item.item.title|truncatewords:3}}</h6>
+      <small class="text-muted">{{order_item.item.description|truncatewords:3}}</small>
     </div>
     <span class="text-muted">${{order_item.get_final_price}}</span>
   </li>
 
   {% endfor %}
 
-  {% if order.coupon %}
+  <!-- {% if order.coupon %}
   <li class="list-group-item d-flex justify-content-between bg-light">
     <div class="text-success">
       <h6 class="my-0">Promo code</h6>
@@ -26,15 +26,15 @@
     </div>
     <span class="text-success">-${{order.coupon.amount}}</span>
   </li>
-  {% endif %}
+  {% endif %} -->
 
   <li class="list-group-item d-flex justify-content-between">
     <span>Total (USD)</span>
-    <strong>${{order.get_total_price}}</strong>
+    <strong>${{cart.get_total_price}}</strong>
   </li>
 </ul>
 <!-- Promo code -->
-<form class="card p-2" method="post" action="{% url 'core:add-coupon' %}">
+<form class="card p-2" method="post" action="">
   {% csrf_token %}
   <div class="input-group">
     <!-- <input type="text" class="form-control" placeholder="Promo code" aria-label="Recipient's username" aria-describedby="basic-addon2"> -->

@@ -78,12 +78,13 @@
               <div class="card-body text-center">
                 <!--Category & Title-->
                 <a href="" class="grey-text">
-                  <h5>{{item.get_category_display}}</h5>
+                  <!-- <h5>{{item.get_category_display}}</h5> -->
+                  <span class="badge purple mr-1">{{item.get_category_display}}</span>
+
                 </a>
                 <h5>
                   <strong>
-                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{item.title}}
-                      <span class="badge badge-pill {{item.get_label_display}}-color">NEW</span>
+                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{item.title|truncatewords:5}}
                     </a>
                   </strong>
                 </h5>

@@ -28,14 +28,14 @@
               <!--address-->
               <div class="md-form mb-5">
                 <!-- <input type="text" id="address" class="form-control" placeholder="1234 Main St"> -->
-                  {{form.street_address}}
+                  {{checkout_form.street_address}}
                 <label for="address" class="">Address</label>
               </div>
 
               <!--address-2-->
               <div class="md-form mb-5">
                 <!-- <input type="text" id="address-2" class="form-control" placeholder="Apartment or suite"> -->
-                {{ form.apartment_address }}
+                {{ checkout_form.apartment_address }}
                 <label for="address-2" class="">Address 2 (optional)</label>
               </div>
 
@@ -46,7 +46,7 @@
                 <div class="col-lg-4 col-md-12 mb-4">
 
                   <label for="country">Country</label>
-                  {{ form.contry }}
+                  {{ checkout_form.contry }}
 
                 </div>
                 <!--Grid column-->
@@ -57,7 +57,7 @@
                 <div class="col-lg-4 col-md-6 mb-4">
 
                   <label for="zip">Zip</label>
-                  {{ form.zip }}
+                  {{ checkout_form.zip }}
                   <!-- <input type="text" class="form-control" id="zip" placeholder="" required> -->
 
 
@@ -70,18 +70,18 @@
               <hr>
 
               <div class="custom-control custom-checkbox">
-                <input {% if form.same_billing_address.value %}checked{% endif%}  type="checkbox" class="custom-control-input" name='same_billing_address' id="same-address">
+                <input {% if checkout_form.same_billing_address.value %}checked{% endif%}  type="checkbox" class="custom-control-input" name='same_billing_address' id="same-address">
                 <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
               </div>
               <div class="custom-control custom-checkbox">
-                <input {% if form.save_info.value %}checked{% endif%}   type="checkbox" name="save_info" class="custom-control-input" id="save-info">
+                <input {% if checkout_form.save_info.value %}checked{% endif%}   type="checkbox" name="save_info" class="custom-control-input" id="save-info">
                 <label class="custom-control-label" name='{{form.save_info.id_for_label}}' for="save-info">Save this information for next time</label>
               </div>
 
               <hr>
 
               <div class="d-block my-3">
-                {% for value, name in form.fields.payment_option.choices %}
+                {% for value, name in checkout_form.fields.payment_option.choices %}
                 <div class="custom-control custom-radio">
 
                   <input id="{{name}}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input" checked required>
