@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
 
 # Users model
 User = settings.AUTH_USER_MODEL
@@ -22,6 +23,30 @@ class Item(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse(
+            'core:item_detail',
+            kwargs={
+                'pk':self.id
+            }
+        )
+
+    def get_add_to_cart_url(self):
+        return reverse(
+            'core:add_to_cart',
+            kwargs={
+                'id':self.id
+            }
+        )
+
+    def get_remove_from_cart_url(self):
+        return reverse(
+            'core:remove_from_cart',
+            kwargs={
+                'id':self.id
+            }
+        )
+
 #shoping carts models
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -41,6 +66,7 @@ class Cart(models.Model):
     def get_total_price(self):
         order_items = self.orderitem_set.get_queryset()
         total_price = 0
+
         for order_item in order_items:
             total_price += order_item.get_final_price() * order_item.quantity
         return total_price
@@ -71,6 +97,22 @@ class OrderItem(models.Model):
         if self.item.discount_price:
             return self.item.discount_price
         return self.item.price
+
+    def add_single_order_item_to_cart(self):
+        return reverse(
+            'core:add_single_order_item_to_cart',
+            kwargs={
+                'id':self.id
+            }
+        )
+
+    def remove_single_order_item_from_cart(self):
+        return reverse(
+            'core:remove_single_order_item_from_cart',
+            kwargs={
+                'id':self.id
+            }
+        )
 
 
     def __str__(self):
