@@ -49,7 +49,7 @@ class Item(models.Model):
 
 #shoping carts models
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
 
     #cart items count getter
@@ -70,6 +70,18 @@ class Cart(models.Model):
         for order_item in order_items:
             total_price += order_item.get_final_price() * order_item.quantity
         return total_price
+
+    def complete_order(self):
+        # self.ordered = True
+        for order_item in self.orderitem_set.get_queryset():
+            order_item.ordered = True
+            order_item.save()
+        self.ordered = True
+        self.save()
+     
+            
+        
+
 
     def __str__(self):
         return f'{self.user.username} {self.orderitem_set.count()}'
@@ -117,3 +129,48 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.item.title
+
+
+#Billing address model 
+class BillingAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.user.username
+
+#Payment model
+class Payment(models.Model):
+    """ Payment models """
+    stripe_charge_id = models.CharField(max_length=50)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amounts = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        """" models print show """
+        return self.user.username
+
+#Order model 
+class Order(models.Model):
+    """ order management model """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField( null=True, blank=True)
+    ordered = models.BooleanField(default=False)
+    billing_address = models.ForeignKey(BillingAddress, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.OneToOneField(Cart, on_delete=models.SET_NULL, null=True, blank=True)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    being_delivered = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        """ order printer """
+        return self.user.username
+
+  
