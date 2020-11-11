@@ -18,6 +18,8 @@
   <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+  {% block link %}
+  {% endblock %}
   <style type="text/css">
     html,
     body,
@@ -93,5 +95,8 @@
         new WOW().init();
 
       </script>
+        {% block script %}
+
+        {% endblock %}
 </body>
 </html>
