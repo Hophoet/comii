@@ -14,24 +14,29 @@ class CheckoutForm(forms.Form):
     street_address = forms.CharField(widget=forms.TextInput(
         attrs={
             'placeholder':'234 lome-TOGO',
-            'class':''
+            'class':'form-control'
         }
     )
     )
     apartment_address = forms.CharField( widget=forms.TextInput(
         attrs={
             'placeholder':'2 Fevier chambre 409',
-            'class':''
+            'class':'form-control'
         }
         )
     )
 
-    country = forms.ChoiceField(choices=COUNTRY_CHOICES)
-
-    zip = forms.CharField(widget=forms.TextInput(
+    # country = forms.ChoiceField(choices=COUNTRY_CHOICES)
+    country = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'placeholder':'your country',
+            'class':'form-control',
+        }
+    ))
+    zip_code = forms.CharField(widget=forms.TextInput(
         attrs={
             'placeholder':'zip',
-            'class':''
+            'class':'form-control'
         }
     ))
 
