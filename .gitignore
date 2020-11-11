@@ -113,3 +113,6 @@ apis/config.txt
 
 #used template files
 template/
+
+#migrations
+core/migrations
