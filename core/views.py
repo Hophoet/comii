@@ -1,9 +1,12 @@
 import time 
 import datetime
+from django.conf import settings
+#
+from django.core.mail import send_mail
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-
+from django.core.exceptions import ObjectDoesNotExist
 
 from  django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
@@ -12,11 +15,27 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import (Item, OrderItem, Cart, User, 
-Order, BillingAddress, Payment)
-from .forms import CheckoutForm
+Order, BillingAddress, Payment, Coupon)
+from .forms import CheckoutForm, CouponForm
 
 #stripe
 import stripe
+
+
+def mailSender(subject, message, from_email, recipient_list):
+    try:
+        send_mail(
+            subject,
+            message,
+            from_email,
+            recipient_list
+        )
+    except Exception as error:
+        print(error)
+
+    else:
+        print('message send successfully!')
+
 
 # Create your views here.
 class HomeView(ListView):
@@ -101,6 +120,8 @@ def remove_from_cart(request, id):
     cart_order_item_exists = order_item in  cart.orderitem_set.get_queryset()
 
     if cart_order_item_exists:
+        order_item.quantity = 1
+        order_item.save()
         cart.orderitem_set.remove(order_item)
         messages.info(request, 'This item was removed form your cart')
     else:
@@ -183,9 +204,11 @@ class CheckoutView(LoginRequiredMixin, View):
         
         if not cart_created:
             checkout_form = CheckoutForm()
+            coupon_form = CouponForm()
             context =  {
                 'cart':cart,
-                'checkout_form':checkout_form
+                'checkout_form':checkout_form,
+                'coupon_form':coupon_form
             }
 
             
@@ -251,7 +274,8 @@ class StripePaymentView(LoginRequiredMixin, View):
             user=self.request.user,
             ordered=False
         )
-        context = {'cart':cart}
+        coupon_form = CouponForm()
+        context = {'cart':cart, 'coupon_form': coupon_form}
         return render(self.request, 'stripe_payment.html', context)
 
     def post(self, *args, **kwargs):
@@ -263,7 +287,7 @@ class StripePaymentView(LoginRequiredMixin, View):
             ordered=False
         )
 
-        stripe.api_key = "key"
+        stripe.api_key = settings.STRIPE_SECRET_KEY
     
 
         data = self.request.POST
@@ -280,24 +304,66 @@ class StripePaymentView(LoginRequiredMixin, View):
 
             else:
                 # print('ORDER ALRADY EXISTS')
-
-                #payment stripe charge test id
-                stripe_charge_id = 283
-                #create payment
-                payment = Payment.objects.create(
-                    stripe_charge_id=stripe_charge_id,
-                    user=self.request.user,
-                    amounts=order.cart.get_total_price()
-                )
-                #update order
-                order.payment = payment
-                order.ordered_date = datetime.datetime.now()
-                order.ordered = True
-                order.save()
-                order.cart.complete_order()
-                messages.info(self.request, f'Order done successfully!!')
-                return redirect('core:home')
+                #stripe charging
+                test_stripe_token = '8JD894'
+                amount = int(order.cart.get_total_price() * 100)
                 
+                #Stripe request 
+                mailSender('order', 'your order is ordered successfully', 'hophoet@gmail.com' ['test@gmail.com'])
+
+                try:
+
+                    charge = stripe.Charge.create(
+                        amount=amount,
+                        currency='usd',
+                        source=self.request.POST.get('card-code')
+                    )
+                except stripe.error.CardError as error:
+                    body = error.json_body
+                    error = body.get('error', {})
+                    messages.error(self.request, f'{error.get("message")}')
+                except stripe.error.RateLimitError as error:
+                    body = error.json_body
+                    error = body.get('error', {})
+                    messages.error(self.request, f'{error.get("message")}')
+                except stripe.error.InvalidRequestError as error:
+                    body = error.json_body
+                    error = body.get('error', {})
+                    messages.error(self.request, f'{error.get("message")}')
+                except stripe.error.AuthenticationError as error:
+                    body = error.json_body
+                    error = body.get('error', {})
+                    messages.error(self.request, f'{error.get("message")}')
+                except stripe.error.APIConnectionError as error:
+                    body = error.json_body
+                    print('BODY', body)
+                    # error = body.get('error', {})
+                    messages.error(self.request, f'{"connexion error"}')
+                except stripe.error.StripeError as error:
+                    body = error.json_body
+                    error = body.get('error', {})
+                    messages.error(self.request, f'{error.get("message")}')
+                except Exception as error:
+                    messages.error(self.request, f'{error}')
+                else:
+                    print('Stripe TRYCATCH else')
+                    #payment stripe charge test id
+                    stripe_charge_id = 283
+                    #create payment
+                    payment = Payment.objects.create(
+                        stripe_charge_id=stripe_charge_id,
+                        user=self.request.user,
+                        amounts=order.cart.get_total_price()
+                    )
+                    #update order
+                    order.payment = payment
+                    order.ordered_date = datetime.datetime.now()
+                    order.ordered = True
+                    order.save()
+                    order.cart.complete_order()
+                    messages.info(self.request, f'Order done successfully!!')
+                    return redirect('core:home')
+                    
                 
 
 
@@ -306,7 +372,37 @@ class StripePaymentView(LoginRequiredMixin, View):
         return redirect('core:stripe_payment')
 
         
-def success_payment(request):
-    context = {}
-    return render(request, 'success_payment.html', context)
-    
+
+class AddCouponView(View):
+    def post(self, *args, **kwargs):
+        form = CouponForm(self.request.POST or None)
+
+        if form.is_valid():
+
+            # order getting try condition
+            try:
+                code = form.cleaned_data.get('code')
+                order, order_created = Order.objects.get_or_create(
+                    user=self.request.user,
+                    ordered=False
+                )
+                cart = order.cart
+                #coupon getting try
+                try:
+                    coupon = Coupon.objects.get(code=code)
+                except ObjectDoesNotExist:
+                    messages.info(self.request, 'This coupon does not exist')
+                    return redirect('core:checkout')
+                #check if the current coupon not already added
+                if(cart.coupon and cart.coupon.code == code):
+                    #add info messages for the existing for the same coupon
+                    messages.info(self.request, 'This coupon is already added')
+                    return redirect('core:checkout')
+                cart.coupon = coupon
+                cart.save()
+                messages.success(self.request, 'Coupon successfully added')
+                return redirect('core:checkout')
+            except ObjectDoesNotExist:
+                messages.info(self.request, "You don't have an active order")
+                return redirect('core:checkout')
+
