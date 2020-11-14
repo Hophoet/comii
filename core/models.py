@@ -47,11 +47,24 @@ class Item(models.Model):
             }
         )
 
+
+  
+#coupon request model
+class Coupon(models.Model):
+    code = models.CharField(max_length=100)
+    amount = models.FloatField()
+
+    def __str__(self):
+        """ coupon instace print method """
+        return self.code
+
+
+
 #shoping carts models
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
-
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, blank=True, null=True)
     #cart items count getter
     def get_items_count(self):
         order_items = self.orderitem_set.get_queryset()
@@ -69,6 +82,8 @@ class Cart(models.Model):
 
         for order_item in order_items:
             total_price += order_item.get_final_price() * order_item.quantity
+        if self.coupon:
+            total_price -= self.coupon.amount
         return total_price
 
     def complete_order(self):
@@ -173,4 +188,7 @@ class Order(models.Model):
         """ order printer """
         return self.user.username
 
-  
+
+
+
+
