@@ -18,6 +18,17 @@ def cart_item_count(user):
         return 0
    
 @register.filter
+def cart_getter(user):
+    if user.is_authenticated:
+        cart, cart_created = Cart.objects.get_or_create(
+        user=user,
+        ordered=False
+        )
+        return  cart if(not cart_created) else None
+    return None
+
+
+@register.filter
 def cart_contain_item(user, item):
     order_item, order_item_created = OrderItem.objects.get_or_create(
         item=item,
