@@ -1,6 +1,8 @@
 <!-- Heading -->
 <h4 class="d-flex justify-content-between align-items-center mb-3">
-  <span class="text-muted">Your cart</span>
+  <span class="text-muted"></span>
+  <h2 class=" my-5 p-2 h1 badge badge-dark badge-primary offset-1">My Cart</h2>
+
   <span class="badge badge-secondary badge-pill">{{order.items.count}}</span>
 </h4>
 
@@ -13,20 +15,20 @@
       <h6 class="my-0">{{order_item.item.title|truncatewords:3}}</h6>
       <small class="text-muted">{{order_item.item.description|truncatewords:3}}</small>
     </div>
-    <span class="text-muted">${{order_item.get_final_price}}</span>
+    <span class="text-muted">${{order_item.get_total_order_item_price}}</span>
   </li>
 
   {% endfor %}
 
-  <!-- {% if order.coupon %}
+  {% if cart.coupon %}
   <li class="list-group-item d-flex justify-content-between bg-light">
     <div class="text-success">
       <h6 class="my-0">Promo code</h6>
-      <small>{{order.coupon.code}}</small>
+      <small>{{cart.coupon.code}}</small>
     </div>
-    <span class="text-success">-${{order.coupon.amount}}</span>
+    <span class="text-success">-${{cart.coupon.amount}}</span>
   </li>
-  {% endif %} -->
+  {% endif %}
 
   <li class="list-group-item d-flex justify-content-between">
     <span>Total (USD)</span>
@@ -34,7 +36,7 @@
   </li>
 </ul>
 <!-- Promo code -->
-<form class="card p-2" method="post" action="">
+<form class="card p-2" method="post" action="{% url 'core:add_coupon' %}">
   {% csrf_token %}
   <div class="input-group">
     <!-- <input type="text" class="form-control" placeholder="Promo code" aria-label="Recipient's username" aria-describedby="basic-addon2"> -->
