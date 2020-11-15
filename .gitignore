@@ -115,4 +115,4 @@ apis/config.txt
 template/
 
 #migrations
-core/migrations
+# core/migrations
