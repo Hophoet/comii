@@ -24,12 +24,13 @@ import stripe
 
 def mailSender(subject, message, from_email, recipient_list):
     try:
-        send_mail(
-            subject,
-            message,
-            from_email,
-            recipient_list
-        )
+        # send_mail(
+        #     subject,
+        #     message,
+        #     from_email,
+        #     recipient_list
+        # )
+        pass
     except Exception as error:
         print(error)
 
@@ -309,7 +310,7 @@ class StripePaymentView(LoginRequiredMixin, View):
                 amount = int(order.cart.get_total_price() * 100)
                 
                 #Stripe request 
-                mailSender('order', 'your order is ordered successfully', 'hophoet@gmail.com' ['test@gmail.com'])
+                # mailSender('order', 'your order is ordered successfully', 'hophoet@gmail.com' ['test@gmail.com'])
 
                 try:
 
