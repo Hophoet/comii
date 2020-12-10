@@ -7,7 +7,8 @@ User = settings.AUTH_USER_MODEL
 #items categories
 ITEMS_CATEGORIES = (
     ('S', 'Shirt'),
-    ('OW', 'Out Wear')
+    ('OW', 'Out Wear'),
+    ('SH', 'Shoe'),
 )
 #items model
 class Item(models.Model):
