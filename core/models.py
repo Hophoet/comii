@@ -9,6 +9,7 @@ ITEMS_CATEGORIES = (
     ('S', 'Shirt'),
     ('OW', 'Out Wear'),
     ('SH', 'Shoe'),
+    ('NT', 'New Tech'),
 )
 #items model
 class Item(models.Model):
