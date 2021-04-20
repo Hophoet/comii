@@ -161,7 +161,7 @@ class Payment(models.Model):
     """ Payment models """
     stripe_charge_id = models.CharField(max_length=50)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amounts = models.FloatField()
+    amount = models.FloatField()
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
