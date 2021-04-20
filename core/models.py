@@ -179,6 +179,7 @@ class Order(models.Model):
     cart = models.OneToOneField(Cart, on_delete=models.SET_NULL, null=True, blank=True)
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
     delivered = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
 
 
     def __str__(self):
