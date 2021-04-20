@@ -249,6 +249,11 @@ class CheckoutView(LoginRequiredMixin, View):
                     zip_code = checkout_form.cleaned_data['zip_code']
                     # phone number for flooz payment for payment
                     phone_number = checkout_form.cleaned_data['phone_number']
+                    payment = Payment.objects.create(
+                        user=self.request.user,
+                        amount=cart.get_total_price(),
+                        phone_number=phone_number
+                    )
                     billing_address = BillingAddress.objects.create(
                         user=user,
                         street_address=street_address,
@@ -256,7 +261,10 @@ class CheckoutView(LoginRequiredMixin, View):
                         country=country,
                         zip_code = zip_code,
                     )
+                    cart.complete_order()
                     order.billing_address = billing_address
+                    order.payment = payment
+                    order.ordered = True
                     order.save()
 
             except Exception as error:
