@@ -90,9 +90,10 @@ class Cart(models.Model):
         return total_price
 
     def complete_order(self):
-        # self.ordered = True
+        self.ordered = True
         for order_item in self.orderitem_set.get_queryset():
             order_item.ordered = True
+            order_item.update_item_quantity()
             order_item.save()
         self.ordered = True
         self.save()
