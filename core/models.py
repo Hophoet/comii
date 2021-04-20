@@ -89,6 +89,14 @@ class Cart(models.Model):
             total_price -= self.coupon.amount
         return total_price
 
+    def get_items_count(self):
+        """ method to get the total item in the cart """
+        items = self.orderitem_set.get_queryset()
+        count = 0
+        for item in items:
+            count += item.quantity
+        return count
+
     def complete_order(self):
         self.ordered = True
         for order_item in self.orderitem_set.get_queryset():
