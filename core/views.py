@@ -47,6 +47,12 @@ class HomeView(ListView):
     # paginate_by = 4
     # ordering = 'title'
 
+    def get_queryset(self, *args, **kwargs):
+        """ queryset getter """
+        items = Item.objects.filter(quantity__gte=1)
+        return items
+
+
 
 
 class ItemDetailView(DetailView):
