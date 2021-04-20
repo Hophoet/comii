@@ -40,13 +40,19 @@ class CheckoutForm(forms.Form):
         }
     ))
 
-    same_billing_address = forms.BooleanField(required=False)
+    phone_number = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'placeholder':'Flooz number',
+            'class':'form-control'
+        }
+    ))
+    # same_billing_address = forms.BooleanField(required=False)
 
-    save_info = forms.BooleanField(required=False)
+    # save_info = forms.BooleanField(required=False)
 
-    payment_option = forms.ChoiceField(
-        widget=forms.RadioSelect, choices=PAYMENT_CHOICES
-    )
+    # payment_option = forms.ChoiceField(
+    #     widget=forms.RadioSelect, choices=PAYMENT_CHOICES
+    # )
 
 
 class CouponForm(forms.Form):
