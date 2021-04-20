@@ -159,7 +159,7 @@ class BillingAddress(models.Model):
 #Payment model
 class Payment(models.Model):
     """ Payment models """
-    phone_number = models.CharField(max_length=50, default="")
+    phone_number = models.CharField(max_length=50)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.FloatField()
     createdAt = models.DateTimeField(auto_now_add=True)
