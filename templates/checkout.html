@@ -61,27 +61,34 @@
                   {{ checkout_form.zip_code }}
                   <!-- <input type="text" class="form-control" id="zip" placeholder="" required> -->
 
+                </div>
+
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4">
+
+                  <label for="phone_number">Flooz number</label>
+                  {{ checkout_form.phone_number }}
+                  <!-- <input type="text" class="form-control" id="zip" placeholder="" required> -->
 
                 </div>
-                <!--Grid column-->
 
               </div>
               <!--Grid row-->
 
-              <hr>
+              <!-- <hr> -->
 
-              <div class="custom-control custom-checkbox">
+              <!-- <div class="custom-control custom-checkbox">
                 <input {% if checkout_form.same_billing_address.value %}checked{% endif%}  type="checkbox" class="custom-control-input" name='same_billing_address' id="same-address">
                 <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
               </div>
               <div class="custom-control custom-checkbox">
                 <input {% if checkout_form.save_info.value %}checked{% endif%}   type="checkbox" name="save_info" class="custom-control-input" id="save-info">
                 <label class="custom-control-label" name='{{form.save_info.id_for_label}}' for="save-info">Save this information for next time</label>
-              </div>
+              </div> -->
 
-              <hr>
+              <!-- <hr> -->
 
-              <div class="d-block my-3">
+              <!-- <div class="d-block my-3">
                 {% for value, name in checkout_form.fields.payment_option.choices %}
                 <div class="custom-control custom-radio">
 
@@ -89,11 +96,11 @@
                   <label class="custom-control-label" for="{{name}}">{{name}}</label>
                 </div>
                 {% endfor %}
-              </div>
+              </div> -->
 
 
               <hr class="mb-4">
-              <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Order</button>
 
             </form>
 
