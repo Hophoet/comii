@@ -240,10 +240,8 @@ class CheckoutView(LoginRequiredMixin, View):
                     apartment_address = checkout_form.cleaned_data['apartment_address']
                     country = checkout_form.cleaned_data['country']
                     zip_code = checkout_form.cleaned_data['zip_code']
-                    payment_option = checkout_form.cleaned_data['payment_option']
-                    same_billing_address = checkout_form.cleaned_data['same_billing_address']
-                    save_info = checkout_form.cleaned_data['save_info']
-                    # print(user, street_address, apartment_address, country, zip_code, payment_option, same_billing_address, save_info, sep='\n')
+                    # phone number for flooz payment for payment
+                    phone_number = checkout_form.cleaned_data['phone_number']
                     billing_address = BillingAddress.objects.create(
                         user=user,
                         street_address=street_address,
@@ -253,12 +251,10 @@ class CheckoutView(LoginRequiredMixin, View):
                     )
                     order.billing_address = billing_address
                     order.save()
-                    if payment_option == 'S':
-                        return redirect('core:stripe_payment')
 
             except Exception as error:
-                print('ERROR', error)
                 return redirect('core:checkout')
+            messages.info(self.request, f'order successfully')
             return redirect('core:checkout')
 
         return redirect('core:home')
