@@ -1,6 +1,7 @@
 import time 
 import datetime
 from django.conf import settings
+from django.utils import timezone
 #
 from django.core.mail import send_mail
 
@@ -37,7 +38,6 @@ def mailSender(subject, message, from_email, recipient_list):
     else:
         print('message send successfully!')
 
-
 # Create your views here.
 class HomeView(ListView):
     """ Home page view """
@@ -51,8 +51,6 @@ class HomeView(ListView):
         """ queryset getter """
         items = Item.objects.all()
         return items
-
-
 
 
 class ItemDetailView(DetailView):
@@ -200,6 +198,22 @@ class CartView(LoginRequiredMixin, View):
 
         return redirect('core:home')
 
+
+class OrdersView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        #geting of the order_item, or creation if not exists
+        orders = Order.objects.filter(
+            user=self.request.user,
+            ordered=True
+        )
+        context = {
+            'orders': orders
+        }
+        # print(cart.get_order_items_query())
+        return render(self.request, 'orders.html', context)
+
+        return redirect('core:orders')
+
     
 class CheckoutView(LoginRequiredMixin, View):
     """ Checkout view """
@@ -263,11 +277,13 @@ class CheckoutView(LoginRequiredMixin, View):
                     )
                     cart.complete_order()
                     order.billing_address = billing_address
+                    order.ordered_date = datetime.datetime.now(tz=timezone.utc)
                     order.payment = payment
                     order.ordered = True
                     order.save()
 
             except Exception as error:
+                print(error)
                 return redirect('core:checkout')
             messages.info(self.request, f'order successfully')
             return redirect('core:checkout')
