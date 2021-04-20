@@ -159,7 +159,6 @@ class BillingAddress(models.Model):
 #Payment model
 class Payment(models.Model):
     """ Payment models """
-    stripe_charge_id = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=50, default="")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.FloatField()
