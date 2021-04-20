@@ -49,7 +49,7 @@ class HomeView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         """ queryset getter """
-        items = Item.objects.filter(quantity__gte=1)
+        items = Item.objects.all()
         return items
 
 
@@ -65,10 +65,11 @@ class ItemDetailView(DetailView):
 @login_required
 def add_to_cart(request, id):
     """ add to cart view method manager """
-
-
     #get of the item
     item = get_object_or_404(Item, id=id)
+    if(item.quantity <= 0):
+        messages.info(request, f'Ce produit est fini en stock.')
+        return redirect('core:item_detail', pk=id)
     #geting of the order_item, or creation if not exists
     order_item, order_item_created = OrderItem.objects.get_or_create(
         item=item,
