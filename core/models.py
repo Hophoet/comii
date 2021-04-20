@@ -97,10 +97,6 @@ class Cart(models.Model):
         self.ordered = True
         self.save()
      
-            
-        
-
-
     def __str__(self):
         return f'{self.user.username} {self.orderitem_set.count()}'
 
@@ -144,7 +140,6 @@ class OrderItem(models.Model):
             }
         )
 
-
     def __str__(self):
         return self.item.title
 
@@ -169,7 +164,6 @@ class Payment(models.Model):
     amounts = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         """" models print show """
         return self.user.username
@@ -184,7 +178,7 @@ class Order(models.Model):
     billing_address = models.ForeignKey(BillingAddress, on_delete=models.CASCADE, null=True, blank=True)
     cart = models.OneToOneField(Cart, on_delete=models.SET_NULL, null=True, blank=True)
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
-    being_delivered = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
 
 
     def __str__(self):
