@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container wow fadeIn">
+      <!--Grid row-->
+      <div class="row">
+        <h2 class=" my-5 p-2 h1 badge badge-dark badge-primary offset-1">Orders</h2>
+
+        <div class="col-md-8 mb-4"></div>
+          <table class="table">
+            <thead>
+              {% if orders %}
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Date</th>
+                <th scope="col">Nombre de produit</th>
+                <th scope="col">Total Price</th>
+              </tr>
+              {% endif %}
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{order.ordered_date}}</td>
+                <td>{{order.cart.get_items_count}}</td>
+                <td>{{order.cart.get_total_price}}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <th colspan='5'>Orders not available</th>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <a href="{% url 'core:home' %}" class="btn btn-default float-right">continue shopping</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+      </div>
+  </main>
+  <!--Main layout-->
+{% endblock %}
