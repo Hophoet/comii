@@ -166,9 +166,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51HjXyDKvYCb6qstMpnORUwLDScnAXkO53G1IOPULIzbKkF7DOsxdDAC6I2LnNUj0YagJSFwAUXMES2N5oJEAY6se00XZAZdkcp'
 STRIPE_SECRET_KEY = 'sk_test_51HjXyDKvYCb6qstMGs0Ou5ThGNHc5QUMCWeMoaEz2Po3agEQ2qbQUdhP6eNpPwYv1WCbcFnFrTwNaHtScv6FI8jl00Ay2xv9y4'
 
-#EMAIL
-EMAIL_HOST_USER='hophoet'
-EMAIL_HOST_PASSWORD='fakePassword'
+#EMAIL CONFIGSé
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD =os.environ.get('EMAIL_APP_KEY') #past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 #
