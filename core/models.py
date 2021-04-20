@@ -177,7 +177,7 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     billing_address = models.ForeignKey(BillingAddress, on_delete=models.CASCADE, null=True, blank=True)
     cart = models.OneToOneField(Cart, on_delete=models.SET_NULL, null=True, blank=True)
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    payment = models.OneToOneField(Payment, on_delete=models.SET_NULL, null=True, blank=True)
     delivered = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
 
