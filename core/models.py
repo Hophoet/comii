@@ -108,6 +108,11 @@ class OrderItem(models.Model):
     ordered = models.BooleanField(default=False)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=True, null=True)
 
+    def update_item_quantity(self):
+        """ method to  update the item related to the orderitem """
+        self.item.quantity -= self.quantity
+        self.item.save()
+
     def get_amount_saved(self):
         if self.item.discount_price:
             saved_amount = self.item.price - self.item.discount_price
