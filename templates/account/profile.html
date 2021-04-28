@@ -1,0 +1,47 @@
+
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+
+
+<main>
+  <div class="container">
+    <section class=" mb-4">
+      <div class="row wow fadeIn container">
+        <div class="card" style="width: 18rem">
+            <img
+              src="https://www.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{user}}</h5>
+              <span>{{user.email}}</span>
+              <p class="card-text">
+              </p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">commandes Livrées: {{data.delivered_commands_count}}</li>
+              <li class="list-group-item">commandes non livréés: {{data.not_delivered_commands_count}}</li>
+            </ul>
+            <div class="card-body">
+              <!-- <a href="#" class="card-link">shop now</a> -->
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                <input class="form-control" type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+                <button class="btn btn-danger" type="submit">{% trans 'logout' %}</button>
+            </form>
+            </div>
+          </div>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}
