@@ -214,6 +214,30 @@ class OrdersView(LoginRequiredMixin, View):
 
         return redirect('core:orders')
 
+class UserProfileView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        # get the authenticated user
+        user = self.request.user
+        delivered_commands_count = Order.objects.filter(
+            user=user,
+            delivered=True
+        ).count()
+        not_delivered_commands_count = Order.objects.filter(
+            user=user,
+            delivered=False
+        ).count()
+        context = {
+            'user': user,
+            'data': {
+                'delivered_commands_count':delivered_commands_count,
+                'not_delivered_commands_count':not_delivered_commands_count
+            }
+        }
+        
+        return render(self.request, 'account/profile.html', context)
+
+        return redirect('core:orders')
+
     
 class CheckoutView(LoginRequiredMixin, View):
     """ Checkout view """
