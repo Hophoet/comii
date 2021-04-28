@@ -15,4 +15,5 @@ urlpatterns = [
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     path('stripe-payment/', views.StripePaymentView.as_view(), name='stripe_payment'),
     path('add-coupon/', views.AddCouponView.as_view(), name='add_coupon'),
+    path('profile/', views.UserProfileView.as_view(), name='user_profile'),
 ]
